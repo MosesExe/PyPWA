@@ -6,20 +6,16 @@ python:
   - "3.4"
   - "3.5"
   - "3.6"
-install:
-  - if [[ "$TRAVIS_PYTHON_VERSION" == "2.7" ]]; then
-      wget http://repo.continuum.io/miniconda/Miniconda-3.4.2-Linux-x86_64.sh -O miniconda.sh;
-    else
-      wget http://repo.continuum.io/miniconda/Miniconda3-3.4.2-Linux-x86_64.sh -O miniconda.sh;
-    fi
-  - bash miniconda.sh -b -p $HOME/miniconda
-  - export PATH="$HOME/miniconda/bin:$PATH"
+before install:
+  - wget http://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh
+  - chmod +x miniconda.sh
+  - ./miniconda.sh -b
+  - export PATH=/home/travis/miniconda/bin:$PATH
   - hash -r
-  - conda config --set always_yes yes --set changeps1 no
-  - conda update -q conda
+  - conda update --yes conda
+install:
+  - conda install --yes python=$TRAVIS_PYTHON_VERSION pyqt numpy scipy matplotlib
   - conda info -a
-  - conda create -q -n test-environment python=$TRAVIS_PYTHON_VERSION pyqt matplotlib numpy scipy
-  - source activate test-environment
   - "pip install coveralls --upgrade"
   - "pip install coverage --upgrade"
   - "pip install pytest --upgrade"
