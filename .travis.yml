@@ -1,5 +1,9 @@
 sudo: false
 language: python
+cache:
+  apt: true
+  directories:
+  - $HOME/.cache/pip
 python:
   - "2.7"
   - "3.4"
@@ -21,7 +25,7 @@ install:
   - "pip install pytest-runner --upgrade"
   - "pip install pytest-cov --upgrade"
   - "pip install pytest-logging --upgrade"
-  - python setup.py install
+  - python setup.py develop
 script: "py.test --cov=PyPWA tests/ -vvvv"
 after_success:
   - ls -a
