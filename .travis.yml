@@ -6,32 +6,28 @@ python:
   - "3.4"
   - "3.5"
   - "3.6"
-  - "3.6-dev"
-matrix:
-  allow_failures:
-    - python: "3.6-dev"
-addons:
-  apt:
-    packages:
-      - "build-essential"
-      - "gfortran"
-      - "libatlas-base-dev"
-before_install:
-  - python --version
-  - uname -a
-  - ls -a
-  - "pip install --upgrade pip setuptools wheel"
-  - "pip install --upgrade numpy scipy"
-  - "pip install --upgrade iminuit nestle ruamel.yaml tabulate appdirs"
-  - "pip install --upgrade fuzzywuzzy python-Levenshtein"
+install:
+  - sudo apt-get update
+  - if [[ "$TRAVIS_PYTHON_VERSION" == "2.7" ]]; then
+      wget http://repo.continuum.io/miniconda/Miniconda-3.4.2-Linux-x86_64.sh -O miniconda.sh;
+    else
+      wget http://repo.continuum.io/miniconda/Miniconda3-3.4.2-Linux-x86_64.sh -O miniconda.sh;
+    fi
+  - bash miniconda.sh -b -p $HOME/miniconda
+  - export PATH="$HOME/miniconda/bin:$PATH"
+  - hash -r
+  - conda config --set always_yes yes --set changeps1 no
+  - conda update -q conda
+  - conda info -a
+  - conda create -q -n test-environment python=$TRAVIS_PYTHON_VERSION pyqt matplotlib numpy scipy
+  - source activate test-environment
   - "pip install coveralls --upgrade"
   - "pip install coverage --upgrade"
   - "pip install pytest --upgrade"
   - "pip install pytest-runner --upgrade"
   - "pip install pytest-cov --upgrade"
   - "pip install pytest-logging --upgrade"
-install:
-  - "pip install -e ."
+  - python setup.py install
 script: "py.test --cov=PyPWA tests/ -vvvv"
 after_success:
   - ls -a
