@@ -108,7 +108,7 @@ class AbstractVector(object):
             return self._vector[item.lower()].copy()
         else:
             raise ValueError(
-                "Vector has components %s!" % self._vector.dtype.names
+                "Vector has components %s!" % repr(self._vector.dtype.names)
             )
 
     def __setitem__(self, key, value):
@@ -117,7 +117,7 @@ class AbstractVector(object):
             self.__set_new_values(key, value)
         else:
             raise ValueError(
-                "Vector has components %s!" % self._vector.dtype.names
+                "Vector has components %s!" % repr(self._vector.dtype.names)
             )
 
     def __set_new_values(self, key, value):
@@ -138,22 +138,11 @@ class AbstractVector(object):
 
     def __set_single_value(self, key, value):
         # type: (str, float) -> None
-        self._vector['key'] = numpy.full(len(self), value)
+        self._vector[key] = numpy.full(len(self), value)
 
-    def __eq__(self, vector):
-        # type: (type(self)) -> numpy.ndarray
-        # vector == vector
-        return self._vector == vector.get_array()
-
-    def __ne__(self, vector):
-        # type: (type(self)) -> numpy.ndarray
-        # vector != vector
-        return self._vector != vector.get_array()
-
-    def __bool__(self):
-        # type: (type(self)) -> numpy.ndarray
-        # bool(vector)
-        return self._vector.astype(bool)
+    def get_copy(self):
+        # type: () -> type(self)
+        return self.__vector_type(self._vector.copy())
 
     def get_array(self):
         # type: () -> numpy.ndarray

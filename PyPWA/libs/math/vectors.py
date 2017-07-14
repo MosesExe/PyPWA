@@ -93,7 +93,7 @@ class FourVector(_abstract_vectors.AbstractVector):
 
     def get_three_vector(self):
         # type: () -> ThreeVector
-        return ThreeVector(self._vector[['x','y','z']])
+        return ThreeVector(self._vector[['x','y','z']].copy())
 
     @property
     def length_squared(self):
