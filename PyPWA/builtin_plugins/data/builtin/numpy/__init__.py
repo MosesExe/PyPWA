@@ -18,11 +18,11 @@
 
 from PyPWA import AUTHOR, VERSION
 from PyPWA.builtin_plugins.data import data_templates
+from PyPWA.builtin_plugins.data.builtin.numpy import n_iterator
 from PyPWA.builtin_plugins.data.builtin.numpy import n_memory
 from PyPWA.builtin_plugins.data.builtin.numpy import n_read_tests
-from PyPWA.libs.interfaces import data_loaders
 
-__credits__ = ["Christopher Banks"]
+__credits__ = ["Christopher Banks", "Keandre Palmer"]
 __author__ = AUTHOR
 __version__ = VERSION
 
@@ -37,10 +37,10 @@ class NumPyDataPlugin(data_templates.TemplateDataPlugin):
         return n_memory.NumpyMemory()
 
     def get_plugin_reader(self, file_location):
-        return data_loaders.Reader()
+        return n_iterator.NumpyReader(file_location)
 
     def get_plugin_writer(self, file_location):
-        return data_loaders.Writer()
+        return n_iterator.NumpyWriter(file_location)
 
     def get_plugin_read_test(self):
         return n_read_tests.NumpyDataTest()
